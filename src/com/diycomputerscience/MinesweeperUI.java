@@ -3,6 +3,12 @@
  */
 package com.diycomputerscience;
 
+import com.diycomputerscience.minesweepercore.RandomBoardInitializer;
+import com.diycomputerscience.minesweepercore.UncoveredMineException;
+import com.diycomputerscience.minesweepercore.FilePersistenceStrategy;
+import com.diycomputerscience.minesweepercore.DefaultFileConnectionFactory;
+import com.diycomputerscience.minesweepercore.Square;
+
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -12,13 +18,13 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.diycomputerscience.minesweepercore.Board;
 import com.diycomputerscience.minesweepercore.Point;
+import com.diycomputerscience.minesweepercore.PersistenceException;
 
 /**
  * @author pshah
@@ -30,13 +36,16 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 	final int col = 6;
 	private JButton gridArr[][] = new JButton[row][col];
 	private JPanel panel;
+	private Board mineBoard;
 	
 	public MinesweeperUI()
 	{
 		this.setTitle("Minesweeper");
+		
+		this.mineBoard = new Board(new RandomBoardInitializer());
 		this.setMineLayout();
 		this.addWindowListener();
-		Board mineBoard = new Board();
+		
 		
 	}
 	
@@ -50,13 +59,14 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 		this.setVisible(true);
 		panel = new JPanel();
 		panel.setLayout(new GridLayout(row,col));
-		
+	
 		/**In this for loop create the Buttons and populate the Button Array*/
+		JButton gridButton;
 		for(int i=0;i<row;i++)
 		{
 			for(int j=0;j<col;j++)
 			{
-				JButton gridButton = new JButton(""+i+j);
+				gridButton = new JButton("");
 				gridArr[i][j] = gridButton;
 			}
 		}
@@ -68,14 +78,20 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 	}//setMineLayout()
 	
 	/**This method sets the Text on Button equivalent to its cell number*/
-	private void layGrid()
+/*	private void layGrid()
 	{
+		
+	
 		for(int i=0;i<row;i++)
 		{
 			for(int j=0;j<col;j++)
-				((JButton)gridArr[i][j]).setText(""+i+j);
+					//((JButton)gridArr[i][j]);//.setText("");//i+j);
+			
 		}
+		
+				
 	}
+*/
 	
 	/**This method adds the JButtons array to the Panel on the JFrame*/
 	private void addGridButtons()
@@ -102,18 +118,7 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 	
 	public void mouseEntered(MouseEvent me)
 	{
-		for(int i=0;i<gridArr.length;i++)
-			for(int j=0;j<gridArr[0].length;j++)
-			{
-				if((me.getComponent()).equals((Object)gridArr[i][j]))
-				{
-					
-					gridArr[i][j].setText("Mouse Entered");
-					System.out.println("The Mouse Entered on grid ( "+i+","+j+")");
-				}
-								
-			}
-		this.addGridButtons();
+		//this.addGridButtons();
 				
 	}
 	
@@ -126,23 +131,46 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 			((JButton)me.getComponent()).setBorder(BorderFactory.createBevelBorder(1));
 			if(SwingUtilities.isLeftMouseButton(me))
 				((JButton)me.getComponent()).setBackground(new Color(255,255,255));
-			if(SwingUtilities.isRightMouseButton(me))
-				((JButton)me.getComponent()).setBackground(new Color(255,0,0));
-			
+			//if(SwingUtilities.isRightMouseButton(me))
+				//((JButton)me.getComponent()).setBackground(new Color(255,0,0));
+					
 			for(int i=0;i<gridArr.length;i++)
 				for(int j=0;j<gridArr[0].length;j++)
 				{
 					if((me.getComponent()).equals((Object)gridArr[i][j]))
-			
-					 point = new Point(i,j);
+					{
+						Square sq = mineBoard.getSquare(new Point(i,j));
+						
+						
+						if(sq.isMine())
+						{
+							((JButton)gridArr[i][j]).setText("X");//+sq.getStatus().ordinal());
+							((JButton)me.getComponent()).setBackground(new Color(255,0,0));
+							
+						}
+						else
+						{
+							try
+							{
+								mineBoard.uncoverSquare(new Point(i,j));
+							
+							}catch(UncoveredMineException ue)
+							{
+								System.out.println("UnCovered Exception : "+ue);
+							}
+							((JButton)gridArr[i][j]).setText(""+sq.getCount());
+						}
+						return;
+					}
+					
 				}
-		}
+				}
 				 
 	}
 	
 	public void mouseExited(MouseEvent me)
 	{
-		this.layGrid();
+		//this.layGrid();
 	}
 	
 	public void mousePressed(MouseEvent me)
@@ -153,11 +181,10 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 	
 	public void mouseReleased(MouseEvent me)
 	{
-		this.layGrid();
+		//this.layGrid();
 	}
 	
-	/**T
-	 * his method adds Window closing listener
+	/**This method adds Window closing listener
 	 */
 	private void addWindowListener()
 	{

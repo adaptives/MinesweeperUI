@@ -3,6 +3,7 @@
 	<name>MinesweeperUI</name>
 	<comment></comment>
 	<projects>
+		<project>MinesweeperCore</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
