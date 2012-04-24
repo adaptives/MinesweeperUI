@@ -29,5 +29,28 @@ public class BoardTest {
 			assertTrue(square.isMine());
 		}
 	}
+	
+	@Test
+	public void testSquareCount() throws Exception {
+		MockInitializer mockInitializer = new MockInitializer();
+		this.board = new Board(mockInitializer);
+		int expectedCounts[][] = new int[][]{
+				{-1, 2, 1, 1, 0, 0},
+				{2, 3, -1, 1, 0, 0},
+				{1, -1, 2, 2, 1, 1},
+				{1, 2, 2, 2, -1, 2},
+				{0, 2, -1, 3, 3, -1},
+				{0, 2, -1, -1, 2, 1}
+		};
+		for(int i=0; i<Board.WIDTH;i++) {
+			for(int j=0; j<Board.HEIGHT; j++) {
+				Square square = this.board.getSquare(new Point(i,j));
+				int expectedCount = expectedCounts[i][j];
+				if(expectedCount != -1) {
+					assertEquals(expectedCount, square.getCount());
+				}
+			}
+		}
+	}
 
 }
