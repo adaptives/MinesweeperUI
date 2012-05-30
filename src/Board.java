@@ -107,12 +107,8 @@ public class Board {
 	 * @param writer
 	 */
 	public void save(PrintWriter writer) {
-		for(int row=0; row<MAX_ROWS; row++) {
-			for(int col=0; col<MAX_COLS; col++) {
-				String squareDetails = row+","+col+":"+this.sqaures[row][col]; 
-				writer.println(squareDetails);
-			}
-		}
+		BoardPersistenceUtility persistence = new BoardPersistenceUtility();
+		persistence.save(writer, this);
 	}
 	
 //	private void printBoard() {
