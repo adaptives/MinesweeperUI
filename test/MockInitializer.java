@@ -1,6 +1,13 @@
 
 public class MockInitializer implements IInitializer {
-
+	/**
+	 *     X  0  0  0  0  0
+	 *     0  0  X  0  0  0
+	 *     0  X  0  0  0  0
+	 *     0  0  0  0  X  0
+	 *     0  0  X  0  0  X
+	 *     0  0  X  X  0  0 
+	 */
 	@Override
 	public Point[] mines() {
 		return new Point[] {
