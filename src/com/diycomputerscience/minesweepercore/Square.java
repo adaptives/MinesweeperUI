@@ -2,14 +2,69 @@ package com.diycomputerscience.minesweepercore;
 
 public class Square {
 
-	public static enum STATUS {COVERED, UNCOVERED, FLAGGED};
+	public static enum STATUS implements SquareState {
+		
+		COVERED() {
+			
+			@Override
+			public SquareState uncover() throws UncoveredMineException {
+				return UNCOVERED;
+			}
+
+			@Override
+			public SquareState mark() {
+				return FLAGGED;
+			}
+			
+		},
+		
+		UNCOVERED() {
+			
+			@Override
+			public SquareState uncover() throws UncoveredMineException {
+				return UNCOVERED;
+			}
+
+			@Override
+			public SquareState mark() {
+				return UNCOVERED;
+			}
+			
+		},
+		
+		FLAGGED() {
+			
+			@Override
+			public SquareState uncover() throws UncoveredMineException {
+				return FLAGGED;
+			}
+
+			@Override
+			public SquareState mark() {
+				return COVERED;
+			}
+			
+		};
+
+		private static String notRedifined = "This method should have been redefined in the square state";
+		
+		@Override
+		public SquareState uncover() throws UncoveredMineException {
+			throw new RuntimeException(notRedifined);
+		}
+
+		@Override
+		public SquareState mark() {
+			throw new RuntimeException(notRedifined);
+		}
+	};
 	
 	private int count;
 	private boolean mine;
-	private STATUS status;
+	private SquareState currentState;
 	
 	public Square() {
-		this.status = STATUS.COVERED;
+		this.currentState = STATUS.COVERED;
 	}
 	
 	public int getCount() {
@@ -29,39 +84,24 @@ public class Square {
 	}
 	
 	public void setStatus(STATUS status) {
-		this.status = status;
+		this.currentState = status;
 	}
 	
 	public STATUS getStatus() {
-		return this.status;
+		//TODO: Is this a good idea ?
+		return (STATUS)this.currentState;
 	}
 	
 	public void markAsMine() {
-		if(this.getStatus().equals(STATUS.UNCOVERED)) {
-			return;
-		}
-		if(this.getStatus().equals(STATUS.FLAGGED)) {
-			this.setStatus(STATUS.COVERED);
-		} else if(this.getStatus().equals(STATUS.COVERED)) {
-			this.setStatus(STATUS.FLAGGED);
-		}
+		this.currentState = this.currentState.mark();
 	}
 
 	public void uncover() throws UncoveredMineException {
-		if(this.getStatus().equals(STATUS.UNCOVERED)) {
-			return;
+		this.currentState = this.currentState.uncover();
+		//TODO: Should this logic be here or in the state machine ?
+		if(isMine()) {
+			throw new UncoveredMineException();
 		}
-		if(this.getStatus().equals(STATUS.FLAGGED)) {
-			return;
-		}
-		if(this.getStatus().equals(STATUS.COVERED)) {
-			if(!this.isMine()) {
-				this.setStatus(STATUS.UNCOVERED);
-			} else {
-				throw new UncoveredMineException();
-			}
-		}
-		
 	}
 
 	@Override
@@ -69,7 +109,7 @@ public class Square {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (mine ? 1231 : 1237);
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((currentState == null) ? 0 : currentState.hashCode());
 		return result;
 	}
 
@@ -84,14 +124,14 @@ public class Square {
 		Square other = (Square) obj;
 		if (mine != other.mine)
 			return false;
-		if (status != other.status)
+		if (currentState != other.currentState)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Square [count=" + count + ", mine=" + mine + ", status=" + status + "]";
+		return "Square [count=" + count + ", mine=" + mine + ", status=" + currentState + "]";
 	}
 
 }
