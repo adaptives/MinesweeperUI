@@ -1,6 +1,9 @@
+package com.diycomputerscience.minesweepercore;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import com.diycomputerscience.minesweepercore.FileConnectionFactory;
 
 
 public class MockFileConnectionFactory implements FileConnectionFactory {

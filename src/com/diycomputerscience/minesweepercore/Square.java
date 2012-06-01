@@ -1,3 +1,4 @@
+package com.diycomputerscience.minesweepercore;
 
 public class Square {
 

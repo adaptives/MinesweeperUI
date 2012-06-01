@@ -1,3 +1,4 @@
+package com.diycomputerscience.minesweepercore;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -17,6 +18,11 @@ import org.easymock.CaptureType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.diycomputerscience.minesweepercore.Board;
+import com.diycomputerscience.minesweepercore.FilePersistenceStrategy;
+import com.diycomputerscience.minesweepercore.PersistenceStrategy;
+import com.diycomputerscience.minesweepercore.Square;
 
 
 public class FilePersistenceStrategyTest {
