@@ -1,6 +1,5 @@
 package com.diycomputerscience.minesweepercore;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,14 +31,13 @@ public class BoardTest {
 	@Test
 	public void testMinePlacement() {
 		Point mines[] = this.mockInitializer.mines();
-		for(Point point : mines) {
-			Square square = board.getSquare(point);
-			assertTrue(square.isMine());
+		for(Point point : mines) {			
+			assertTrue(board.isSquareMine(point));
 		}
 	}
 	
 	@Test
-	public void testSquareCount() throws Exception {
+	public void testFetchSquareCount() throws Exception {
 		int expectedCounts[][] = new int[][]{
 				{-1, 2, 1, 1, 0, 0},
 				{2, 3, -1, 1, 0, 0},
@@ -49,13 +47,103 @@ public class BoardTest {
 				{0, 2, -1, -1, 2, 1}
 		};
 		for(int row=0; row<Board.MAX_ROWS;row++) {
-			for(int col=0; col<Board.MAX_COLS; col++) {
-				Square square = this.board.getSquare(new Point(row,col));
+			for(int col=0; col<Board.MAX_COLS; col++) {				
 				int expectedCount = expectedCounts[row][col];
 				if(expectedCount != -1) {
 					String msg = "Failed for cell [" + row + "][" + col + "]";
-					assertEquals(msg , expectedCount, square.getCount());
+					assertEquals(msg , expectedCount, board.fetchSquareCount(new Point(row, col)));
 				}
+			}
+		}
+	}
+	
+	@Test
+	public void testInitialSquareStatus() throws Exception {
+		for(int row=0; row<Board.MAX_ROWS;row++) {
+			for(int col=0; col<Board.MAX_COLS; col++) {				
+				assertEquals(Square.STATUS.COVERED, board.fetchSquareStatus(new Point(row, col)));		
+			}
+		}
+	}
+	
+	@Test
+	public void testMarkAsMineWhenCovered() throws Exception {
+		for(int row=0; row<Board.MAX_ROWS;row++) {
+			for(int col=0; col<Board.MAX_COLS; col++) {
+				Point point = new Point(row, col);
+				this.board.markSquareAsMine(point);
+				assertEquals(Square.STATUS.FLAGGED, board.fetchSquareStatus(point));		
+			}
+		}
+	}
+	
+	@Test
+	public void testUncoverSquaresThatAreNotMines() throws Exception {
+		for(int row=0; row<Board.MAX_ROWS;row++) {
+			for(int col=0; col<Board.MAX_COLS; col++) {
+				Point point = new Point(row, col);
+				if(!this.board.isSquareMine(point)) {
+					this.board.uncoverSquare(point);
+					assertEquals(Square.STATUS.UNCOVERED, board.fetchSquareStatus(point));
+				}					
+			}
+		}
+	}
+	
+	@Test
+	public void testUncoverSquaresThatAreAlreadyUncovereds() throws Exception {
+		for(int row=0; row<Board.MAX_ROWS;row++) {
+			for(int col=0; col<Board.MAX_COLS; col++) {
+				Point point = new Point(row, col);
+				if(!this.board.isSquareMine(point)) {
+					this.board.uncoverSquare(point);
+					this.board.uncoverSquare(point);
+					assertEquals(Square.STATUS.UNCOVERED, board.fetchSquareStatus(point));
+				}					
+			}
+		}
+	}
+	
+	@Test
+	public void testUncoverSquaresThatAreMines() throws Exception {
+		for(int row=0; row<Board.MAX_ROWS;row++) {
+			for(int col=0; col<Board.MAX_COLS; col++) {
+				Point point = new Point(row, col);
+				if(this.board.isSquareMine(point)) {
+					try {
+						this.board.uncoverSquare(point);
+						//Note: Understand why we are not using the expected annotation to expect this Exception
+						fail("Square [" + point + "] did not throw UncoveredMineException when uncovered");
+					} catch(UncoveredMineException ume) {
+						//good
+					}
+				}					
+			}
+		}
+	}
+	
+	@Test
+	public void testMarkAsMineWhenUncovered() throws Exception {
+		for(int row=0; row<Board.MAX_ROWS;row++) {
+			for(int col=0; col<Board.MAX_COLS; col++) {
+				Point point = new Point(row, col);
+				if(!this.board.isSquareMine(point)) {
+					this.board.uncoverSquare(point);
+					this.board.markSquareAsMine(point);
+					assertEquals(Square.STATUS.UNCOVERED, board.fetchSquareStatus(point));
+				}					
+			}
+		}
+	}
+	
+	@Test
+	public void testMarkAsMineWhenFlagged() throws Exception {
+		for(int row=0; row<Board.MAX_ROWS;row++) {
+			for(int col=0; col<Board.MAX_COLS; col++) {
+				Point point = new Point(row, col);								
+				this.board.markSquareAsMine(point);
+				this.board.markSquareAsMine(point);
+				assertEquals(Square.STATUS.COVERED, board.fetchSquareStatus(point));									
 			}
 		}
 	}

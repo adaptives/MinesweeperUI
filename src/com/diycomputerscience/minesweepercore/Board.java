@@ -1,8 +1,6 @@
 package com.diycomputerscience.minesweepercore;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Board {
@@ -55,5 +53,29 @@ public class Board {
 		boardState.setSquares(this.persistenceStrategy.load());
 		this.boardState.computeCounts();
 	}
+	
+	//all ops that can be done on this board
+	
+	public int fetchSquareCount(Point point) {
+		return this.boardState.getSquare(point).getCount();
+	}
+	
+	public boolean isSquareMine(Point point) {
+		return this.boardState.getSquare(point).isMine();
+	}
+	
+	public Square.STATUS fetchSquareStatus(Point point) {
+		return this.boardState.getSquare(point).getStatus();
+	}
+
+	public void markSquareAsMine(Point point) {
+		this.boardState.getSquare(point).markAsMine();		
+	}
+
+	public void uncoverSquare(Point point) throws UncoveredMineException  {
+		this.boardState.getSquare(point).uncover();
+	}
+	
+	//end ops
 		
 }
