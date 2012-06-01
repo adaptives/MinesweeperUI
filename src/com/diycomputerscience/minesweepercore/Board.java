@@ -12,7 +12,7 @@ public class Board {
 	
 	private PersistenceStrategy persistenceStrategy;
 	private IInitializer boardInitializer;
-	private Square sqaures[][];
+	private BoardState boardState;
 	
 	public Board() {		
 		
@@ -20,19 +20,11 @@ public class Board {
 	
 	public Board(IInitializer boardInitializer) {
 		this.boardInitializer = boardInitializer;
-		this.sqaures = new Square[MAX_ROWS][MAX_COLS];
-		//instantiate all square
-		for(int row=0; row<MAX_COLS; row++) {
-			for(int col=0; col<MAX_ROWS; col++) {
-				this.sqaures[row][col] = new Square();
-			}
-		}				
-		//mark mines
-		Point mines[] = this.boardInitializer.mines();
-		for(Point point : mines) {
-			this.sqaures[point.row][point.col].setMine(true);
-		}
-		computeCounts();
+		
+		this.boardState = new BoardState(MAX_ROWS, MAX_COLS);
+		this.boardState.init();
+		this.boardState.markMines(this.boardInitializer.mines());						
+		this.boardState.computeCounts();
 	}
 	
 	public void setPersistenceStrategy(PersistenceStrategy persistenceStrategy) {
@@ -43,112 +35,25 @@ public class Board {
 		return this.persistenceStrategy;
 	}
 
-	private void computeCounts() {
-		//compute count
-		for(int row=0; row<MAX_ROWS;row++) {
-			for(int col=0; col<MAX_COLS; col++) {				
-				Square square = this.sqaures[row][col];
-				if(!square.isMine()) {
-					Point squareLocation = new Point(row, col);
-					List<Point> validNeighbours = computeValidNeighbours(squareLocation);					
-					int mineCount = 0;
-					for(Point neighbour : validNeighbours) {
-						if(this.sqaures[neighbour.row][neighbour.col].isMine()) {
-							mineCount++;
-						}
-					}
-					square.setCount(mineCount);
-				}
-			}
-		}
-	}	
-
-	private List<Point> computeValidNeighbours(Point p) {		
-		List<Point> validNeighbours = new ArrayList<Point>();
-		Point topLeft = new Point(p.row-1, p.col-1);
-		if(pointValid(topLeft)) {
-			validNeighbours.add(topLeft);
-		}
-		
-		Point top = new Point(p.row-1, p.col);
-		if(pointValid(top)) {
-			validNeighbours.add(top);
-		}
-		
-		Point topRight = new Point(p.row-1, p.col+1);
-		if(pointValid(topRight)) {
-			validNeighbours.add(topRight);
-		}
-		
-		Point right = new Point(p.row, p.col+1);
-		if(pointValid(right)) {
-			validNeighbours.add(right);
-		}
-		
-		Point bottomRight = new Point(p.row+1, p.col+1);
-		if(pointValid(bottomRight)) {
-			validNeighbours.add(bottomRight);
-		}
-		
-		Point bottom = new Point(p.row+1, p.col);
-		if(pointValid(bottom)) {
-			validNeighbours.add(bottom);
-		}
-		
-		Point bottomLeft = new Point(p.row+1, p.col-1);
-		if(pointValid(bottomLeft)) {
-			validNeighbours.add(bottomLeft);
-		}
-		
-		Point left = new Point(p.row, p.col-1);
-		if(pointValid(left)) {
-			validNeighbours.add(left);
-		}
-		
-		return validNeighbours;
-		
-	}
-	
-	private boolean pointValid(Point p) {		
-		if(p.row >=0 && p.row < MAX_ROWS && p.col >= 0 && p.col < MAX_COLS) {
-			return true;
-		} else {			
-			return false;
-		}
-	}
-
 	public void setSquare(Point point, Square square) {
-		this.sqaures[point.row][point.col] = square;
+		this.boardState.setSquare(point, square);
 	}
 	
 	public Square getSquare(Point point) {
-		return this.sqaures[point.row][point.col];
+		return this.boardState.getSquare(point);		
 	}
 
 	/**
 	 * Save the current state of the board to some persistent storage 
 	 */
 	public void save() throws IOException, PersistenceException {
-		this.persistenceStrategy.save(this.sqaures);
+		this.persistenceStrategy.save(this.boardState.getSquares());
 	}
 	
 	public void load() throws PersistenceException {
-		this.sqaures = this.persistenceStrategy.load();
-		this.computeCounts();
-	}
-	
-	public void printBoard() {
-		for(int row = 0; row < MAX_ROWS; row++) {
-			for(int col = 0; col < MAX_COLS; col++) {
-				Square square = this.sqaures[row][col];
-				if(square.isMine()) {
-					System.out.print(" X ");
-				} else {
-					System.out.print(" " + square.getCount() + " ");
-				}				
-			}
-			System.out.println("");
-		}
+		this.boardState = new BoardState(MAX_ROWS, MAX_COLS);
+		boardState.setSquares(this.persistenceStrategy.load());
+		this.boardState.computeCounts();
 	}
 		
 }
