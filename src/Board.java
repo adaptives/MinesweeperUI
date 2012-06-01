@@ -135,18 +135,18 @@ public class Board {
 		this.computeCounts();
 	}
 	
-//	private void printBoard() {
-//		for(int row = 0; row < MAX_ROWS; row++) {
-//			for(int col = 0; col < MAX_COLS; col++) {
-//				Square square = this.sqaures[row][col];
-//				if(square.isMine()) {
-//					System.out.print(" X ");
-//				} else {
-//					System.out.print(" " + square.getCount() + " ");
-//				}				
-//			}
-//			System.out.println("");
-//		}
-//	}
+	public void printBoard() {
+		for(int row = 0; row < MAX_ROWS; row++) {
+			for(int col = 0; col < MAX_COLS; col++) {
+				Square square = this.sqaures[row][col];
+				if(square.isMine()) {
+					System.out.print(" X ");
+				} else {
+					System.out.print(" " + square.getCount() + " ");
+				}				
+			}
+			System.out.println("");
+		}
+	}
 		
 }
