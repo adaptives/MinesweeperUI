@@ -1,4 +1,4 @@
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +8,13 @@ public class Board {
 	public static final int MAX_COLS = 6;
 	public static final int MAX_ROWS = 6;
 	
+	private PersistenceStrategy persistenceStrategy;
 	private IInitializer boardInitializer;
 	private Square sqaures[][];
+	
+	public Board() {		
+		
+	}
 	
 	public Board(IInitializer boardInitializer) {
 		this.boardInitializer = boardInitializer;
@@ -25,6 +30,18 @@ public class Board {
 		for(Point point : mines) {
 			this.sqaures[point.row][point.col].setMine(true);
 		}
+		computeCounts();
+	}
+	
+	public void setPersistenceStrategy(PersistenceStrategy persistenceStrategy) {
+		this.persistenceStrategy = persistenceStrategy;
+	}
+	
+	public PersistenceStrategy getPersistenceStrategy() {
+		return this.persistenceStrategy;
+	}
+
+	private void computeCounts() {
 		//compute count
 		for(int row=0; row<MAX_ROWS;row++) {
 			for(int col=0; col<MAX_COLS; col++) {				
@@ -98,17 +115,24 @@ public class Board {
 		}
 	}
 
+	public void setSquare(Point point, Square square) {
+		this.sqaures[point.row][point.col] = square;
+	}
+	
 	public Square getSquare(Point point) {
 		return this.sqaures[point.row][point.col];
 	}
 
 	/**
-	 * Save the current state of the board to some persistent storage
-	 * @param writer
+	 * Save the current state of the board to some persistent storage 
 	 */
-	public void save(PrintWriter writer) {
-		BoardPersistenceUtility persistence = new BoardPersistenceUtility();
-		persistence.save(writer, this);
+	public void save() throws IOException, PersistenceException {
+		this.persistenceStrategy.save(this.sqaures);
+	}
+	
+	public void load() throws PersistenceException {
+		this.sqaures = this.persistenceStrategy.load();
+		this.computeCounts();
 	}
 	
 //	private void printBoard() {
