@@ -1,9 +1,9 @@
 package com.diycomputerscience.minesweepercore;
-import com.diycomputerscience.minesweepercore.IInitializer;
+import com.diycomputerscience.minesweepercore.Initializer;
 import com.diycomputerscience.minesweepercore.Point;
 
 
-public class MockInitializer implements IInitializer {
+public class MockInitializer implements Initializer {
 	/**
 	 *     X  0  0  0  0  0
 	 *     0  0  X  0  0  0

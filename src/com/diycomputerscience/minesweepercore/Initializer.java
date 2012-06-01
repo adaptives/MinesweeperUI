@@ -1,6 +1,6 @@
 package com.diycomputerscience.minesweepercore;
 
-public interface IInitializer {
+public interface Initializer {
 	/**
 	 * Returns an array of Point obejcts which denote the locations of 
 	 * mines on the board.

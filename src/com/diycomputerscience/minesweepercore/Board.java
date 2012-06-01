@@ -9,14 +9,14 @@ public class Board {
 	public static final int MAX_ROWS = 6;
 	
 	private PersistenceStrategy persistenceStrategy;
-	private IInitializer boardInitializer;
+	private Initializer boardInitializer;
 	private BoardState boardState;
 	
 	public Board() {		
 		
 	}
 	
-	public Board(IInitializer boardInitializer) {
+	public Board(Initializer boardInitializer) {
 		this.boardInitializer = boardInitializer;
 		
 		this.boardState = new BoardState(MAX_ROWS, MAX_COLS);
