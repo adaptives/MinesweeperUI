@@ -10,8 +10,7 @@ import java.io.PrintWriter;
  * @author pshah
  *
  */
-public interface IFileSystemConnectionFactory {
-
+public interface FileConnectionFactory {
 	public PrintWriter getWriter() throws IOException;
-	public BufferedReader getReader()  throws IOException;
+	public BufferedReader getReader() throws IOException;
 }

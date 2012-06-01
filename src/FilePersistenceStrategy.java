@@ -16,6 +16,12 @@ public class FilePersistenceStrategy implements PersistenceStrategy {
 
 	public static final String SQUARE_FORMAT = "%d,%d:%b-%s";
 	public static final String SQUARE_LOAD_REGEX = "(\\d*),(\\d*):(true|false)-(COVERED|UNCOVERED|FLAGGED)";
+
+	private FileConnectionFactory fileConnectionFactory;
+	
+	public FilePersistenceStrategy(FileConnectionFactory fileConnectionfacory) {
+		this.fileConnectionFactory = fileConnectionfacory;
+	}
 	
 	@Override
 	public void save(Square squares[][]) throws PersistenceException {
@@ -39,9 +45,7 @@ public class FilePersistenceStrategy implements PersistenceStrategy {
 	}
 
 	private PrintWriter getWriter() throws Exception {
-		IFileSystemConnectionFactory factory = 
-				FileSystemConnectionFactoryProvider.getFileSystemConnectionFactory();
-		return factory.getWriter();
+		return fileConnectionFactory.getWriter();
 	}
 
 	@Override
@@ -80,9 +84,7 @@ public class FilePersistenceStrategy implements PersistenceStrategy {
 	}
 
 	private BufferedReader getReader() throws Exception {
-		IFileSystemConnectionFactory factory = 
-				FileSystemConnectionFactoryProvider.getFileSystemConnectionFactory();
-		return factory.getReader();
+		return this.fileConnectionFactory.getReader();
 	}
 
 }
