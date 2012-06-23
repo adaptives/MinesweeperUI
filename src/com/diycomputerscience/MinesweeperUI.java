@@ -3,30 +3,39 @@
  */
 package com.diycomputerscience;
 
-import javax.swing.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * @author pshah
  *
  */
 public class MinesweeperUI  extends JFrame implements MouseListener{
+	
 	final int row = 6;
 	final int col = 6;
-	JButton gridArr[][]=new JButton[row][col];
-	JPanel panel;
+	private JButton gridArr[][] = new JButton[row][col];
+	private JPanel panel;
 	
 	public MinesweeperUI()
 	{
 		this.setTitle("Minesweeper");
 		this.setMineLayout();
 		this.addWindowListener();
-	}//constr
-	/**This method sets the layoutManager to Panel and 
-	 * creates the Buttons for the grid */
+	}
 	
+	/**
+	 * This method sets the layoutManager to Panel and 
+	 * creates the Buttons for the grid 
+	 */	
 	private void setMineLayout()
 	{
 		this.setSize(300, 300);
@@ -34,7 +43,7 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 		panel = new JPanel();
 		panel.setLayout(new GridLayout(row,col));
 		
-		/**In this for loop create the Buttton and populate the Button Array*/
+		/**In this for loop create the Buttons and populate the Button Array*/
 		for(int i=0;i<row;i++)
 		{
 			for(int j=0;j<col;j++)
@@ -59,17 +68,21 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 				((JButton)gridArr[i][j]).setText(""+i+j);
 		}
 	}
+	
 	/**This method adds the JButtons array to the Panel on the JFrame*/
 	private void addGridButtons()
 	{
 		for(int i=0;i<row;i++)
 		{
 			for(int j=0;j<col;j++)
-				panel.add((JComponent)gridArr[i][j]);
+				panel.add(gridArr[i][j]);
 		}
 	}
-	/**This method circulates through the Buttons Array and adds 
-	 * MouseListener to each Button on the grid*/
+	
+	/**
+	 * This method circulates through the Buttons Array and adds 
+	 * MouseListener to each Button on the grid
+	 */
 	private void addGridMouseListener()
 	{
 		for(int i=0;i<row;i++)
@@ -95,23 +108,30 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 		this.addGridButtons();
 				
 	}
+	
 	public void mouseClicked(MouseEvent me)
 	{
 		
 		
 	}
+	
 	public void mouseExited(MouseEvent me)
 	{
 		this.layGrid();
 	}
+	
 	public void mousePressed(MouseEvent me)
 	{
 	}
+	
 	public void mouseReleased(MouseEvent me)
 	{
 		this.layGrid();
 	}
-	/**This method adds Window closing listener*/
+	
+	/**T
+	 * his method adds Window closing listener
+	 */
 	private void addWindowListener()
 	{
 		this.addWindowListener(new WindowAdapter()
