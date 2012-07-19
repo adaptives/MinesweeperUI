@@ -4,15 +4,21 @@
 package com.diycomputerscience;
 
 import java.awt.GridLayout;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import com.diycomputerscience.minesweepercore.Board;
+import com.diycomputerscience.minesweepercore.Point;
 
 /**
  * @author pshah
@@ -30,6 +36,8 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 		this.setTitle("Minesweeper");
 		this.setMineLayout();
 		this.addWindowListener();
+		Board mineBoard = new Board();
+		
 	}
 	
 	/**
@@ -111,8 +119,25 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 	
 	public void mouseClicked(MouseEvent me)
 	{
-		
-		
+		Point point;
+		if(((JButton)me.getComponent()).isEnabled())
+		{
+			((JButton)me.getComponent()).setEnabled(false);
+			((JButton)me.getComponent()).setBorder(BorderFactory.createBevelBorder(1));
+			if(SwingUtilities.isLeftMouseButton(me))
+				((JButton)me.getComponent()).setBackground(new Color(255,255,255));
+			if(SwingUtilities.isRightMouseButton(me))
+				((JButton)me.getComponent()).setBackground(new Color(255,0,0));
+			
+			for(int i=0;i<gridArr.length;i++)
+				for(int j=0;j<gridArr[0].length;j++)
+				{
+					if((me.getComponent()).equals((Object)gridArr[i][j]))
+			
+					 point = new Point(i,j);
+				}
+		}
+				 
 	}
 	
 	public void mouseExited(MouseEvent me)
@@ -122,6 +147,8 @@ public class MinesweeperUI  extends JFrame implements MouseListener{
 	
 	public void mousePressed(MouseEvent me)
 	{
+		
+		
 	}
 	
 	public void mouseReleased(MouseEvent me)
