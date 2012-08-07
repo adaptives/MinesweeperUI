@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>MinesweeperUI</name>
 	<comment></comment>
 	<projects>
 		<project>MinesweeperCore</project>
+=======
+	<name>MinesweeperCore</name>
+	<comment></comment>
+	<projects>
+>>>>>>> c7275667681e8e73cf32056bd71b73cd41371cdd
 	</projects>
 	<buildSpec>
 		<buildCommand>
