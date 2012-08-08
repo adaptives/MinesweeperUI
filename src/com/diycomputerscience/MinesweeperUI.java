@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.diycomputerscience;
+package src.com.diycomputerscience;
 
-import com.diycomputerscience.minesweepercore.RandomBoardInitializer;
-import com.diycomputerscience.minesweepercore.UncoveredMineException;
-import com.diycomputerscience.minesweepercore.FilePersistenceStrategy;
-import com.diycomputerscience.minesweepercore.DefaultFileConnectionFactory;
+import src.com.diycomputerscience.minesweepercore.RandomBoardInitializer;
+import src.com.diycomputerscience.minesweepercore.UncoveredMineException;
+import src.com.diycomputerscience.minesweepercore.FilePersistenceStrategy;
+import src.com.diycomputerscience.minesweepercore.DefaultFileConnectionFactory;
 import com.diycomputerscience.minesweepercore.Square;
 
 import java.awt.GridLayout;
@@ -22,9 +22,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import com.diycomputerscience.minesweepercore.Board;
-import com.diycomputerscience.minesweepercore.Point;
-import com.diycomputerscience.minesweepercore.PersistenceException;
+import src.com.diycomputerscience.minesweepercore.Board;
+import src.com.diycomputerscience.minesweepercore.Point;
+import src.com.diycomputerscience.minesweepercore.PersistenceException;
 
 /**
  * @author pshah
