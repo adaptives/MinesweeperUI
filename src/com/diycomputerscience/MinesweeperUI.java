@@ -1,16 +1,11 @@
 /**
  * 
  */
-package src.com.diycomputerscience;
+package com.diycomputerscience;
 
-import src.com.diycomputerscience.minesweepercore.RandomBoardInitializer;
-import src.com.diycomputerscience.minesweepercore.UncoveredMineException;
-import src.com.diycomputerscience.minesweepercore.FilePersistenceStrategy;
-import src.com.diycomputerscience.minesweepercore.DefaultFileConnectionFactory;
-import com.diycomputerscience.minesweepercore.Square;
 
-import java.awt.GridLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -22,14 +17,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import src.com.diycomputerscience.minesweepercore.Board;
-import src.com.diycomputerscience.minesweepercore.Point;
-import src.com.diycomputerscience.minesweepercore.PersistenceException;
+import com.diycomputerscience.minesweepercore.Board;
+import com.diycomputerscience.minesweepercore.RandomBoardInitializer;
+import com.diycomputerscience.minesweepercore.Square;
+import com.diycomputerscience.minesweepercore.UncoveredMineException;
 
 /**
  * @author pshah
  *
- */
+*/
+
 public class MinesweeperUI  extends JFrame implements MouseListener{
 	
 	final int row = 6;
