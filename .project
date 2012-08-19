@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>minesweepercore</name>
-			<type>2</type>
-			<location>D:/work/MinesweeperUI/src/com/diycomputerscience/minesweepercore</location>
-		</link>
-	</linkedResources>
 </projectDescription>
